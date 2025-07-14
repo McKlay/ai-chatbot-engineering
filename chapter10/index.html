@@ -1,0 +1,1723 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Comprehensive Guide to Developing and Scaling AI Chatbots">
+      
+      
+        <meta name="author" content="Clay Mark Sarte">
+      
+      
+        <link rel="canonical" href="https://mcklay.github.io/ai-chatbot-engineering/chapter10/">
+      
+      
+        <link rel="prev" href="../PartIII_overview/">
+      
+      
+        <link rel="next" href="../chapter11/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
+    
+    
+      
+        <title>      Chapter 10 - AI Chatbot Engineering</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#chapter-10-introduction-to-self-hosted-llms" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AI Chatbot Engineering" class="md-header__button md-logo" aria-label="AI Chatbot Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI Chatbot Engineering
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 10
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="light-blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AI Chatbot Engineering" class="md-nav__button md-logo" aria-label="AI Chatbot Engineering" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AI Chatbot Engineering
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Table of Contents
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Preface/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp; Preface
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PartI_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp; 📖 Part I: Foundations fo Chatbot Technology
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 1
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 2
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 3
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 4
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PartII_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp; 📖 Part II: Rapid Development
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 5
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 6
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 7
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter8/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 8
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter9/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 9
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PartIII_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp; 📖 Part III: Hosting LLM Models
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 10
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 10
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-self-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Self-Host?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits-of-self-hosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of Self-Hosting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tradeoffs-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tradeoffs &amp; Challenges
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hardware Considerations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on-prem-vs-cloud-hosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      On-Prem vs. Cloud Hosting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-model-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing a Model to Host
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hosting-options-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hosting Options Preview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-should-you-self-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      When Should You Self-Host?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 11
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 12
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 13
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 14
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PartIV_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp; 📖 Part IV: Scaling Infrastructure & Performance
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 15
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 16
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 17
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 18
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 19
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PartV_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp; 📖 Part V: Advanced Integration & Capabilities
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 20
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 21
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 22
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 23
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 24
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 25
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../PartVI_overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp; 📖 Part VI: Case Studies
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 26
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 27
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../chapter28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Chapter 28
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../appendices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    &nbsp;&nbsp; 📖 Appendices
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-self-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Self-Host?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#benefits-of-self-hosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Benefits of Self-Hosting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tradeoffs-challenges" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tradeoffs &amp; Challenges
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hardware Considerations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#on-prem-vs-cloud-hosting" class="md-nav__link">
+    <span class="md-ellipsis">
+      On-Prem vs. Cloud Hosting
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-a-model-to-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choosing a Model to Host
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hosting-options-preview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hosting Options Preview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-should-you-self-host" class="md-nav__link">
+    <span class="md-ellipsis">
+      When Should You Self-Host?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+
+
+
+
+<h1 id="chapter-10-introduction-to-self-hosted-llms">Chapter 10: Introduction to Self-Hosted LLMs<a class="headerlink" href="#chapter-10-introduction-to-self-hosted-llms" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><em>“At some point, the question is no longer ‘What can GPT do for us?’ but rather, ‘What could we do if we owned the brain?’”</em></p>
+</blockquote>
+<h2 id="why-self-host">Why Self-Host?<a class="headerlink" href="#why-self-host" title="Permanent link">&para;</a></h2>
+<p>Most chatbot builders begin with API calls to OpenAI, Anthropic, or Cohere. It's fast, it works, and it scales—until it doesn't.</p>
+<p>At a certain stage, product owners start to run into barriers:</p>
+<ul>
+<li><strong>Monthly bills skyrocket</strong> due to token usage.</li>
+<li><strong>User data privacy</strong> becomes a concern, especially in finance, healthcare, or enterprise SaaS.</li>
+<li><strong>Latency</strong> becomes noticeable in regions far from OpenAI’s servers.</li>
+<li><strong>Customization limits</strong> emerge—your use case demands domain-specific knowledge or behavior that generic models don’t capture.</li>
+</ul>
+<p>This is when teams start exploring <strong>self-hosting</strong>—running open-source LLMs on their own infrastructure to <strong>cut costs, increase privacy, and tune behavior</strong>.</p>
+<p>But self-hosting isn’t just a technical switch. It’s a <strong>philosophical one</strong>. You’re not just building with AI anymore—you’re <strong>operating</strong> it.</p>
+<hr />
+<h2 id="benefits-of-self-hosting">Benefits of Self-Hosting<a class="headerlink" href="#benefits-of-self-hosting" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Benefit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full Control</td>
+<td>You decide the model, tokenizer, prompt format, and fine-tuning setup.</td>
+</tr>
+<tr>
+<td>Data Privacy</td>
+<td>Sensitive user data never leaves your servers—ideal for compliance needs.</td>
+</tr>
+<tr>
+<td>Lower Latency</td>
+<td>Host the model near your users (edge or on-prem) to reduce response time.</td>
+</tr>
+<tr>
+<td>Cost Savings</td>
+<td>For high-volume apps, GPU hosting may be cheaper than pay-per-token APIs.</td>
+</tr>
+<tr>
+<td>Customization</td>
+<td>Tune models to specific domains, add guardrails, or chain with internal tools.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tradeoffs-challenges">Tradeoffs &amp; Challenges<a class="headerlink" href="#tradeoffs-challenges" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hardware Complexity</td>
+<td>Requires knowledge of GPU/TPU setup and maintenance.</td>
+</tr>
+<tr>
+<td>Model Management</td>
+<td>Loading, updating, and versioning models must be handled manually.</td>
+</tr>
+<tr>
+<td>Inferencing Overhead</td>
+<td>Inference is compute-heavy and requires optimization to stay responsive.</td>
+</tr>
+<tr>
+<td>Tooling Ecosystem</td>
+<td>No built-in dashboards, logs, or error handling like OpenAI’s playground.</td>
+</tr>
+<tr>
+<td>Security &amp; Access</td>
+<td>You must secure APIs, model weights, and usage logs yourself.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="hardware-considerations">Hardware Considerations<a class="headerlink" href="#hardware-considerations" title="Permanent link">&para;</a></h2>
+<p>To self-host LLMs, you’ll need the right compute environment. The table below summarizes key options:</p>
+<table>
+<thead>
+<tr>
+<th>Hardware Type</th>
+<th>Description</th>
+<th>Ideal Use Case</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GPU</strong></td>
+<td>Graphics Processing Unit</td>
+<td>Real-time chat, RAG systems, fine-tuning</td>
+<td>Best for transformer models</td>
+</tr>
+<tr>
+<td><strong>TPU</strong></td>
+<td>Tensor Processing Unit (Google Cloud)</td>
+<td>Deep learning training workloads</td>
+<td>Limited framework support outside TensorFlow</td>
+</tr>
+<tr>
+<td><strong>CPU</strong></td>
+<td>Standard processors</td>
+<td>Batch inference, quantized small models</td>
+<td>Cheaper but much slower</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tip:</strong> Use <strong>A100, H100, or L4</strong> GPUs for production-grade hosting. For local dev/testing, <strong>RTX 3080/3090/4090</strong> is often enough.</p>
+<hr />
+<h2 id="on-prem-vs-cloud-hosting">On-Prem vs. Cloud Hosting<a class="headerlink" href="#on-prem-vs-cloud-hosting" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cloud</strong></td>
+<td>Easy to scale, managed GPUs, global access</td>
+<td>Can be expensive long-term, dependent on provider</td>
+</tr>
+<tr>
+<td><strong>On-Prem</strong></td>
+<td>Full data control, potentially cheaper in bulk</td>
+<td>Requires hardware, cooling, maintenance</td>
+</tr>
+<tr>
+<td><strong>Hybrid</strong></td>
+<td>Cloud for burst workloads, on-prem for base</td>
+<td>Requires orchestration + monitoring</td>
+</tr>
+</tbody>
+</table>
+<p>Popular cloud GPU providers include:</p>
+<ul>
+<li>🔸 <strong>AWS EC2 / SageMaker</strong></li>
+<li>🔸 <strong>Google Cloud / Vertex AI</strong></li>
+<li>🔸 <strong>Azure ML</strong></li>
+<li>🔸 <strong>RunPod</strong>, <strong>Lambda Labs</strong>, <strong>Paperspace</strong> <em>(budget-friendly for hobbyists)</em></li>
+</ul>
+<hr />
+<h2 id="choosing-a-model-to-host">Choosing a Model to Host<a class="headerlink" href="#choosing-a-model-to-host" title="Permanent link">&para;</a></h2>
+<p>Here are some popular open-source LLMs:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Size (params)</th>
+<th>Highlights</th>
+<th>License</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LLaMA 2</strong></td>
+<td>7B–70B</td>
+<td>Strong general performance, fine-tunable</td>
+<td>Meta (non-commercial for now)</td>
+</tr>
+<tr>
+<td><strong>Mistral</strong></td>
+<td>7B</td>
+<td>Very fast, efficient, great for RAG</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td><strong>Falcon</strong></td>
+<td>7B–180B</td>
+<td>Good open weights, multilingual support</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td><strong>Gemma</strong></td>
+<td>2B–7B</td>
+<td>Google-backed, performant and compact</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td><strong>Phi-2</strong></td>
+<td>2.7B</td>
+<td>Extremely small yet surprisingly capable</td>
+<td>MIT</td>
+</tr>
+</tbody>
+</table>
+<p>Start with <strong>Mistral-7B</strong> or <strong>Phi-2</strong> if you're deploying on a single GPU. These models are light enough to run on a 24–32GB GPU and fast enough for real-time inference.</p>
+<hr />
+<h2 id="hosting-options-preview">Hosting Options Preview<a class="headerlink" href="#hosting-options-preview" title="Permanent link">&para;</a></h2>
+<p>We’ll go deeper in the next chapters, but here’s a preview of what’s ahead:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Tech Stack</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SageMaker Endpoint</strong></td>
+<td>AWS, Docker, PyTorch/TensorFlow</td>
+<td>Enterprise-grade model hosting</td>
+</tr>
+<tr>
+<td><strong>Google Vertex AI</strong></td>
+<td>TF/ONNX + managed services</td>
+<td>Auto-scaled inference endpoints</td>
+</tr>
+<tr>
+<td><strong>Hugging Face Inference Endpoint</strong></td>
+<td>Transformers + Web UI</td>
+<td>Easiest deployment, lower control</td>
+</tr>
+<tr>
+<td><strong>FastAPI + Docker</strong></td>
+<td>Open source infra</td>
+<td>DIY local or cloud hosting</td>
+</tr>
+<tr>
+<td><strong>llama.cpp / GGUF</strong></td>
+<td>CPU/embedded devices</td>
+<td>Offline or edge chatbot experiences</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="when-should-you-self-host">When Should You Self-Host?<a class="headerlink" href="#when-should-you-self-host" title="Permanent link">&para;</a></h2>
+<p>Use the checklist below:</p>
+<p>✅ You need full control over model behavior<br />
+✅ Your app handles sensitive data (health, legal, finance)<br />
+✅ You're serving millions of tokens per day<br />
+✅ You want to train or fine-tune on proprietary datasets<br />
+✅ You want to run inference offline or on-prem  </p>
+<hr />
+<h2 id="summary">Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>Self-hosting an LLM transforms you from a consumer of AI to an <strong>operator of intelligence</strong>. You get freedom, privacy, and performance—but you pay for it in complexity.</p>
+<p>The rest of this part will walk you through how to <strong>host your own LLM</strong> step-by-step—on AWS, GCP, Hugging Face, or entirely from scratch using open-source tools. You'll learn how to make it secure, fast, and production-ready.</p>
+<blockquote>
+<p><em>Next stop: building on managed cloud platforms — where convenience meets configurability.</em></p>
+</blockquote>
+<hr />
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/McKlay" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/clay-mark-sarte-283855147/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.expand", "content.code.copy", "content.code.annotate", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      
+    
+  </body>
+</html>
