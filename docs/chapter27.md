@@ -26,9 +26,9 @@ Each case study ends with practical takeaways you can apply to your own project.
 
 ## 27.1 Case Study: ClayBot – From Side Project to Systems Thinking
 
-**Developer**: Clay Mark Sarte
-**Use Case**: Portfolio chatbot for GitHub project Q\&A
-**Stack**: FastAPI + OpenAI (gpt-3.5-turbo) + Supabase (pgvector) + React Chat Widget
+**Developer**: Clay Mark Sarte  
+**Use Case**: Portfolio chatbot for GitHub project Q\&A  
+**Stack**: FastAPI + OpenAI (gpt-3.5-turbo) + Supabase (pgvector) + React Chat Widget  
 
 ### Story
 
