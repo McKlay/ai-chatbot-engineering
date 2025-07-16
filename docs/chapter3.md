@@ -41,23 +41,23 @@ While embeddings capture and store meaning, specialized databases store and quer
 
 * **Supabase (pgvector)**:
 
-  * **Pros**: Open-source PostgreSQL integration, easy to set up, scalable, seamless integration with existing PostgreSQL workflows.
-  * **Cons**: Relatively newer; requires familiarity with SQL and database administration.
+    * **Pros**: Open-source PostgreSQL integration, easy to set up, scalable, seamless integration with existing PostgreSQL workflows.
+    * **Cons**: Relatively newer; requires familiarity with SQL and database administration.
 
 * **Pinecone**:
 
-  * **Pros**: Managed cloud service, highly scalable, production-ready, minimal setup required. Offers strong performance guarantees.
-  * **Cons**: Closed-source, costs increase significantly with scale, limited local deployment options.
+    * **Pros**: Managed cloud service, highly scalable, production-ready, minimal setup required. Offers strong performance guarantees.
+    * **Cons**: Closed-source, costs increase significantly with scale, limited local deployment options.
 
 * **Weaviate**:
 
-  * **Pros**: Open-source, semantic search optimized, native support for NLP tasks, good developer experience.
-  * **Cons**: Setup complexity can increase for distributed deployments; performance tuning requires deeper expertise.
+    * **Pros**: Open-source, semantic search optimized, native support for NLP tasks, good developer experience.
+    * **Cons**: Setup complexity can increase for distributed deployments; performance tuning requires deeper expertise.
 
 * **Qdrant**:
 
-  * **Pros**: Lightweight, open-source, easy-to-use REST API, excellent performance in retrieval tasks. Suitable for local and cloud deployments.
-  * **Cons**: Less mature ecosystem compared to Pinecone or Weaviate, ongoing feature expansion.
+    * **Pros**: Lightweight, open-source, easy-to-use REST API, excellent performance in retrieval tasks. Suitable for local and cloud deployments.
+    * **Cons**: Less mature ecosystem compared to Pinecone or Weaviate, ongoing feature expansion.
 
 Each solution offers distinct trade-offs in terms of scalability, ease of use, deployment flexibility, and integration, allowing developers to match database selection to their precise business needs and technical context.
 
