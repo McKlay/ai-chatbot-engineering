@@ -7,9 +7,12 @@ hide:
 
 ---
 
+
 While prompts guide the LLM’s behavior, they alone can’t store long-term memory or domain-specific knowledge. What happens when your chatbot needs to reference company documents, FAQs, or proprietary knowledge? That’s where **RAG (Retrieval-Augmented Generation)** comes in.
 
-This chapter explores how to give your chatbot memory—by using **embeddings**, **vector databases**, and a smart retrieval pipeline. You’ll learn how to embed documents, store them efficiently using `pgvector` in Supabase, and query relevant context at runtime to inject into your prompts.
+RAG enables your chatbot to access up-to-date, organization-specific, or proprietary information on demand, making it far more useful and trustworthy. It bridges the gap between static model knowledge and dynamic, real-world data.
+
+This chapter explores how to give your chatbot memory—by using **embeddings**, **vector databases**, and a smart retrieval pipeline. You’ll learn how to embed documents, store them efficiently using `pgvector` in Supabase, and query relevant context at runtime to inject into your prompts. We’ll also cover best practices for chunking, retrieval, and debugging.
 
 ---
 
@@ -27,7 +30,8 @@ RAG is a hybrid technique combining information retrieval and language generatio
 4. **Retrieved context is injected** into the prompt sent to the LLM.
 5. **LLM responds** with an answer grounded in that context.
 
-This creates a powerful feedback loop between storage and generation—minimizing hallucinations and enabling domain-specific accuracy.
+
+This creates a powerful feedback loop between storage and generation—minimizing hallucinations and enabling domain-specific accuracy. RAG is especially valuable for regulated industries, technical support, and any scenario where answers must be grounded in verifiable sources.
 
 ---
 
@@ -44,13 +48,15 @@ Before embedding your knowledge base, you must break it into digestible pieces. 
 | Overlapping windows                     | Improves retrieval accuracy     | Increases storage size        |
 | Recursive splitting (based on headings) | Hierarchical context            | More complex to implement     |
 
-> 💡 Use a hybrid strategy: split by paragraph → add sliding window overlap of 10–20% for better semantic coverage.
+
+> 💡 Use a hybrid strategy: split by paragraph → add sliding window overlap of 10–20% for better semantic coverage. Always ensure chunks are large enough to capture context, but small enough to avoid irrelevant content.
 
 ---
 
 ## 7.3 Embedding with `text-embedding-3-small` (OpenAI)
 
-Once you have chunks, each is converted into an embedding—a numerical vector representing its semantic meaning.
+
+Once you have chunks, each is converted into an embedding—a numerical vector representing its semantic meaning. Embeddings allow for efficient similarity search, letting you find the most relevant information for any user query.
 
 ### Example Python Code (using OpenAI):
 
@@ -67,11 +73,13 @@ response = openai.embeddings.create(
 embedding = response['data'][0]['embedding']
 ```
 
+
 ### Why `text-embedding-3-small`?
 
-* Fast and affordable.
-* High semantic performance.
-* Compact vector size (1536 dims).
+* Fast and affordable, making it suitable for large-scale or real-time applications.
+* High semantic performance, capturing nuanced meaning across languages and domains.
+* Compact vector size (1536 dims), balancing accuracy and storage efficiency.
+* Well-supported by OpenAI’s API and compatible with most vector databases.
 
 ---
 
@@ -89,15 +97,17 @@ Supabase is a developer-friendly PostgreSQL-as-a-service platform. When paired w
    create extension if not exists vector;
    ```
 
+
 3. **Create embeddings table:**
 
-   ```sql
-   create table documents (
-     id uuid primary key,
-     content text,
-     embedding vector(1536)
-   );
-   ```
+    ```sql
+    create table documents (
+       id uuid primary key,
+       content text,
+       embedding vector(1536),
+       metadata jsonb -- optional: store titles, sources, tags
+    );
+    ```
 
 4. **Insert documents and embeddings:**
 
@@ -110,10 +120,11 @@ Supabase is a developer-friendly PostgreSQL-as-a-service platform. When paired w
    );
    ```
 
+
 5. **Query by similarity:**
 
    ```sql
-   select content
+   select content, metadata
    from documents
    order by embedding <-> '[user_embedding]'
    limit 5;
@@ -125,11 +136,12 @@ Supabase is a developer-friendly PostgreSQL-as-a-service platform. When paired w
 
 ## 7.5 Vector Retrieval in the Backend
 
+
 You’ll build a function that:
 
-1. Embeds the user query.
-2. Sends a similarity query to Supabase.
-3. Returns the top-k matching chunks.
+1. Embeds the user query using the same embedding model as your documents.
+2. Sends a similarity query to Supabase (or your vector DB of choice).
+3. Returns the top-k matching chunks, optionally including metadata for transparency.
 
 ### Python Example:
 
@@ -140,7 +152,8 @@ def retrieve_context(user_query: str):
     return "\n".join([r['content'] for r in results])
 ```
 
-You can now inject this into the prompt:
+
+You can now inject this into the prompt, making the LLM’s answer grounded in real, retrieved knowledge:
 
 ```python
 context = retrieve_context(user_input)
@@ -159,13 +172,16 @@ User: {user_input}
 
 ## 7.6 Best Practices for RAG Bots
 
+
 | Principle              | Recommendation                                              |
 | ---------------------- | ----------------------------------------------------------- |
-| Limit context length   | Keep injected context under 1500 tokens                     |
+| Limit context length   | Keep injected context under 1500 tokens (or model limit)    |
 | Clean input            | Strip HTML, fix typos, remove irrelevant sections           |
 | Cache embeddings       | Don’t re-embed the same query repeatedly                    |
 | Handle missing results | Fallback to LLM-only response if retrieval fails            |
 | Track provenance       | Show sources or titles alongside answers (for transparency) |
+| Update regularly       | Re-embed documents when content changes                     |
+| Monitor performance    | Track retrieval accuracy and user feedback                  |
 
 ---
 
@@ -178,13 +194,17 @@ When RAG doesn't perform as expected:
 * Inspect similarity query—are the right chunks being returned?
 * Log the actual injected prompt for inspection.
 
-Use tools like Postgres query logs, vector visualizations (e.g., t-SNE), and similarity scoring to inspect RAG performance.
+
+Use tools like Postgres query logs, vector visualizations (e.g., t-SNE or UMAP), and similarity scoring to inspect RAG performance. Regularly review retrieval logs and user feedback to refine chunking, embedding, and prompt strategies.
 
 ---
 
 ## Conclusion: Giving Your Chatbot a Brain
 
+
 With RAG, your chatbot evolves from a generic assistant to a domain-aware knowledge bot. By embedding documents and retrieving relevant content during conversations, you build an **AI system with grounded knowledge, reduced hallucinations, and improved trustworthiness**.
+
+RAG is a cornerstone of modern enterprise chatbots, enabling compliance, transparency, and continuous improvement. As your knowledge base grows, so does your bot’s intelligence.
 
 In the next chapter, we’ll turn back to the frontend—bringing this intelligence to users with a sleek React-based chat interface and refined UX features.
 
