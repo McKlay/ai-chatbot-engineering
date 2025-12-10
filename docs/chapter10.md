@@ -9,22 +9,24 @@ hide:
 
 ## Why Self-Host?
 
+
 Most chatbot builders begin with API calls to OpenAI, Anthropic, or Cohere. It's fast, it works, and it scales—until it doesn't.
 
 At a certain stage, product owners start to run into barriers:
 
-* **Monthly bills skyrocket** due to token usage.
-* **User data privacy** becomes a concern, especially in finance, healthcare, or enterprise SaaS.
-* **Latency** becomes noticeable in regions far from OpenAI’s servers.
-* **Customization limits** emerge—your use case demands domain-specific knowledge or behavior that generic models don’t capture.
+* **Monthly bills skyrocket** due to token usage, especially as user adoption grows.
+* **User data privacy** becomes a concern, especially in finance, healthcare, or enterprise SaaS, where regulations like GDPR or HIPAA apply.
+* **Latency** becomes noticeable in regions far from OpenAI’s servers, impacting user experience.
+* **Customization limits** emerge—your use case demands domain-specific knowledge, custom guardrails, or unique workflows that generic models don’t capture.
 
-This is when teams start exploring **self-hosting**—running open-source LLMs on their own infrastructure to **cut costs, increase privacy, and tune behavior**.
+This is when teams start exploring **self-hosting**—running open-source LLMs on their own infrastructure to **cut costs, increase privacy, and tune behavior**. Self-hosting can also unlock new business models, such as on-premise deployments for clients or offline/edge AI.
 
-But self-hosting isn’t just a technical switch. It’s a **philosophical one**. You’re not just building with AI anymore—you’re **operating** it.
+But self-hosting isn’t just a technical switch. It’s a **philosophical one**. You’re not just building with AI anymore—you’re **operating** it. You become responsible for uptime, security, and model performance.
 
 ---
 
 ## Benefits of Self-Hosting
+
 
 | Benefit          | Description                                                                    |
 | ---------------- | ------------------------------------------------------------------------------ |
@@ -32,11 +34,13 @@ But self-hosting isn’t just a technical switch. It’s a **philosophical one**
 | Data Privacy  | Sensitive user data never leaves your servers—ideal for compliance needs.      |
 | Lower Latency  | Host the model near your users (edge or on-prem) to reduce response time.      |
 | Cost Savings  | For high-volume apps, GPU hosting may be cheaper than pay-per-token APIs.      |
-| Customization | Tune models to specific domains, add guardrails, or chain with internal tools. |
+| Customization | Tune models to specific domains, add guardrails, chain with internal tools, or integrate with proprietary data. |
+| Offline/Edge   | Run models in disconnected environments or on customer premises.              |
 
 ---
 
 ## Tradeoffs & Challenges
+
 
 | Challenge               | Description                                                               |
 | ----------------------- | ------------------------------------------------------------------------- |
@@ -45,6 +49,7 @@ But self-hosting isn’t just a technical switch. It’s a **philosophical one**
 | Inferencing Overhead | Inference is compute-heavy and requires optimization to stay responsive.  |
 | Tooling Ecosystem    | No built-in dashboards, logs, or error handling like OpenAI’s playground. |
 | Security & Access    | You must secure APIs, model weights, and usage logs yourself.             |
+| Scaling              | Need to plan for load balancing, failover, and monitoring.                |
 
 ---
 
@@ -58,7 +63,8 @@ To self-host LLMs, you’ll need the right compute environment. The table below 
 | **TPU**       | Tensor Processing Unit (Google Cloud) | Deep learning training workloads         | Limited framework support outside TensorFlow |
 | **CPU**       | Standard processors                   | Batch inference, quantized small models  | Cheaper but much slower                      |
 
-**Tip:** Use **A100, H100, or L4** GPUs for production-grade hosting. For local dev/testing, **RTX 3080/3090/4090** is often enough.
+
+**Tip:** Use **A100, H100, or L4** GPUs for production-grade hosting. For local dev/testing, **RTX 3080/3090/4090** is often enough. Always check model requirements for VRAM and compatibility.
 
 ---
 
@@ -83,6 +89,7 @@ Popular cloud GPU providers include:
 
 Here are some popular open-source LLMs:
 
+
 | Model       | Size (params) | Highlights                               | License                       |
 | ----------- | ------------- | ---------------------------------------- | ----------------------------- |
 | **LLaMA 2** | 7B–70B        | Strong general performance, fine-tunable | Meta (non-commercial for now) |
@@ -90,14 +97,18 @@ Here are some popular open-source LLMs:
 | **Falcon**  | 7B–180B       | Good open weights, multilingual support  | Apache 2.0                    |
 | **Gemma**   | 2B–7B         | Google-backed, performant and compact    | Apache 2.0                    |
 | **Phi-2**   | 2.7B          | Extremely small yet surprisingly capable | MIT                           |
+| **Qwen**    | 7B–72B        | Multilingual, strong performance         | Apache 2.0                    |
+| **Mixtral** | 8x7B (MoE)    | Mixture-of-Experts, high throughput      | Apache 2.0                    |
 
-Start with **Mistral-7B** or **Phi-2** if you're deploying on a single GPU. These models are light enough to run on a 24–32GB GPU and fast enough for real-time inference.
+
+Start with **Mistral-7B** or **Phi-2** if you're deploying on a single GPU. These models are light enough to run on a 24–32GB GPU and fast enough for real-time inference. For edge or offline use, quantized versions (e.g., GGUF, GPTQ) can run on CPUs or even mobile devices.
 
 ---
 
 ## Hosting Options Preview
 
 We’ll go deeper in the next chapters, but here’s a preview of what’s ahead:
+
 
 | Method                              | Tech Stack                      | Use Case                            |
 | ----------------------------------- | ------------------------------- | ----------------------------------- |
@@ -106,10 +117,12 @@ We’ll go deeper in the next chapters, but here’s a preview of what’s ahead
 | **Hugging Face Inference Endpoint** | Transformers + Web UI           | Easiest deployment, lower control   |
 | **FastAPI + Docker**                | Open source infra               | DIY local or cloud hosting          |
 | **llama.cpp / GGUF**                | CPU/embedded devices            | Offline or edge chatbot experiences |
+| **vLLM / TGI**                      | High-throughput serving         | Multi-user, production inference    |
 
 ---
 
 ## When Should You Self-Host?
+
 
 Use the checklist below:
 
@@ -118,14 +131,16 @@ Use the checklist below:
 ✅ You're serving millions of tokens per day  
 ✅ You want to train or fine-tune on proprietary datasets  
 ✅ You want to run inference offline or on-prem  
+✅ You want to avoid vendor lock-in or API rate limits  
 
 ---
 
 ## Summary
 
-Self-hosting an LLM transforms you from a consumer of AI to an **operator of intelligence**. You get freedom, privacy, and performance—but you pay for it in complexity.
 
-The rest of this part will walk you through how to **host your own LLM** step-by-step—on AWS, GCP, Hugging Face, or entirely from scratch using open-source tools. You'll learn how to make it secure, fast, and production-ready.
+Self-hosting an LLM transforms you from a consumer of AI to an **operator of intelligence**. You get freedom, privacy, and performance—but you pay for it in complexity. The learning curve is real, but so are the rewards for teams that need control and flexibility.
+
+The rest of this part will walk you through how to **host your own LLM** step-by-step—on AWS, GCP, Hugging Face, or entirely from scratch using open-source tools. You'll learn how to make it secure, fast, and production-ready, with tips for monitoring, scaling, and cost management.
 
 > *Next stop: building on managed cloud platforms — where convenience meets configurability.*
 
