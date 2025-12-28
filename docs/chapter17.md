@@ -26,7 +26,10 @@ In this chapter, you'll learn how to monitor the **health, performance, and beha
 | **Vector Search**     | Similarity scores, chunk retrieval latency | Supabase logs, Redis traces         |
 | **Frontend Behavior** | Clicks, message sends, bounce rate         | PostHog, Mixpanel, Google Analytics |
 
----
+
+**Advanced Monitoring Tip:**
+
+For distributed systems, add correlation IDs to every request and propagate them through all services (frontend, backend, vector DB, LLM). This enables end-to-end tracing and root cause analysis.
 
 ## 1. Prometheus + Grafana (Infra + Backend Metrics)
 
@@ -62,6 +65,11 @@ scrape_configs:
 
 4. Visualize in **Grafana** (build custom dashboards)
 
+**Kubernetes/Cloud-Native:**
+
+- Use Prometheus Operator or managed Prometheus (AWS, GCP) for auto-discovery and scaling.
+- Export custom app metrics (e.g., token usage, RAG latency) using `/metrics` endpoints.
+
 ---
 
 ## Key Backend Metrics to Track
@@ -73,6 +81,9 @@ scrape_configs:
 | `embedding_lookup_latency`  | Time spent in vector DB retrieval           |
 | `token_usage_total`         | Per-user and per-model token consumption    |
 | `queue_length_celery_tasks` | If using async task queues                  |
+
+| `rag_retrieval_latency`    | Time to fetch docs for RAG                  |
+| `frontend_latency`         | Time from user click to response            |
 
 ---
 
@@ -101,6 +112,11 @@ posthog.capture('doc_uploaded', { fileSize: 13200 });
 
 You can segment by **auth ID**, **tenant**, or **model used** for powerful filtering.
 
+**Best Practice:**
+
+- Anonymize user data before sending to analytics tools to comply with privacy laws (GDPR, CCPA).
+- Use feature flags to track adoption of new chatbot features.
+
 ---
 
 ## 3. Error Logging with Sentry
@@ -126,6 +142,11 @@ Sentry will now log:
 * HTTP errors
 * Custom events (`sentry_sdk.capture_message()`)
 
+**Advanced Error Handling:**
+
+- Tag errors with user ID, tenant, and endpoint for rapid triage.
+- Use Sentry Performance to trace slow transactions across async tasks and external APIs.
+
 ---
 
 ## 4. Custom Token Usage & Cost Tracker
@@ -145,6 +166,21 @@ store_token_log(user_id, tokens, endpoint, timestamp)
 
 Save logs in a **PostgreSQL table** or use **Supabase functions** to aggregate usage.
 
+**Example: Token Usage Table (PostgreSQL)**
+
+```sql
+CREATE TABLE token_usage (
+  id SERIAL PRIMARY KEY,
+  user_id TEXT,
+  endpoint TEXT,
+  tokens INT,
+  timestamp TIMESTAMPTZ DEFAULT now()
+);
+```
+
+**Cloud-Native:**
+- Use BigQuery, AWS Athena, or Supabase for large-scale aggregation and cost dashboards.
+
 ---
 
 ## 5. Log Everything That Matters
@@ -162,6 +198,11 @@ Use `logging` module in Python or ship logs to:
 * Google Cloud Logging
 * AWS CloudWatch
 
+**Log Enrichment:**
+
+- Add request IDs, user/tenant info, and latency to every log entry.
+- Use structured logging (JSON) for easier parsing and search.
+
 ---
 
 ## Real-World Dashboard Example
@@ -178,6 +219,13 @@ A production chatbot dashboard might include:
 
 These dashboards are **not just for engineers**—they’re valuable for product teams, business leaders, and support agents.
 
+**Example: Grafana Dashboard Panels**
+
+- API latency heatmap by endpoint
+- Token usage by user and model
+- Error rate by tenant
+- RAG retrieval time histogram
+
 ---
 
 ## Summary
@@ -192,4 +240,3 @@ These dashboards are **not just for engineers**—they’re valuable for product
 
 > *You can’t improve what you don’t monitor. And you can’t scale what you don’t understand.*
 
----
