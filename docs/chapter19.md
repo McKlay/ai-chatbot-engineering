@@ -32,7 +32,12 @@ Whether you're working on an internal tool or a global SaaS chatbot, these pract
 | **Inference Hijack**    | Users running the model in unintended ways           |
 | **Supply Chain Risk**   | Vulnerabilities in LLM models or libraries           |
 
----
+
+**Advanced Threats:**
+
+- **Model Extraction:** Attackers try to steal your LLM weights or fine-tuned models via repeated queries.
+- **Data Poisoning:** Malicious users upload documents to pollute your RAG or training data.
+- **Dependency Attacks:** Compromised open-source libraries introduce backdoors.
 
 ## Securing Your Chatbot APIs
 
@@ -56,6 +61,12 @@ def verify_key(x_api_key: str = Header(...)):
 
 > **Best Practice:** Use HTTPS **everywhere**, even in dev.
 
+**Production-Grade API Security:**
+
+- Rotate API keys regularly and support key revocation.
+- Use rate limiting and IP allowlists for sensitive endpoints.
+- Log all failed authentication attempts for audit.
+
 ---
 
 ## Data Privacy Best Practices
@@ -76,6 +87,20 @@ While pgvector doesn’t natively encrypt embeddings, you can:
 * Store encrypted documents in S3/GCS with signed URLs
 * Avoid embedding user secrets (strip during chunking)
 
+**Example: Field Encryption with SQLAlchemy**
+
+```python
+from sqlalchemy_utils import EncryptedType
+from cryptography.fernet import Fernet
+
+key = Fernet.generate_key()
+
+class UserData(Base):
+    __tablename__ = 'user_data'
+    id = Column(Integer, primary_key=True)
+    secret = Column(EncryptedType(String, key))
+```
+
 ---
 
 ## GDPR, HIPAA, and Other Compliance Rules
@@ -94,6 +119,12 @@ Implement:
 * `DELETE /user_data/{user_id}`
 * Export endpoint: `GET /user_data/export`
 
+**Automated Compliance:**
+
+- Use privacy-by-design: minimize data collection, set short retention periods.
+- Automate data deletion and export with scheduled jobs.
+- Log all data access and deletion events for audit.
+
 ---
 
 ### 2. HIPAA (US - Healthcare)
@@ -104,6 +135,10 @@ For chatbots dealing with health info (PHI):
 * **Avoid using 3rd-party APIs that don’t sign BAAs (Business Associate Agreements)**
 * **Log access to health data**
 * **Tokenize PHI before LLM inference, when possible**
+
+**HIPAA Implementation Tips:**
+- Use dedicated, HIPAA-compliant cloud services (e.g., AWS HealthLake, Azure Health Data Services).
+- Mask or redact PHI in logs and analytics.
 
 ---
 
@@ -118,6 +153,10 @@ Focuses on:
 * Processing Integrity
 
 > Use **audit logs, environment separation, access reviews, backups**, and **incident response plans**.
+
+**SOC 2 Automation:**
+- Schedule regular access reviews and penetration tests.
+- Use infrastructure-as-code for environment separation and backup automation.
 
 ---
 
@@ -136,6 +175,16 @@ Focuses on:
 * Google Perspective API
 * Custom toxicity classifiers
 
+**Example: Output Scrubbing Middleware (FastAPI)**
+
+```python
+@app.middleware("http")
+async def scrub_output(request, call_next):
+    response = await call_next(request)
+    # Add logic to mask emails, phone numbers, or PII in response body
+    return response
+```
+
 ---
 
 ## Secure Your Inference Pipeline
@@ -148,7 +197,10 @@ Focuses on:
 | Storage (S3, GCS) | Signed URLs, encryption, access controls |
 | CI/CD Pipelines   | Secrets management, code scanning        |
 
----
+
+**Supply Chain Security:**
+- Use Dependabot or Renovate to monitor dependencies for CVEs.
+- Pin package versions and scan Docker images for vulnerabilities (Trivy, Snyk).
 
 ## Summary
 
@@ -163,5 +215,14 @@ Security and compliance are **not afterthoughts**—they’re integral to trust,
 | Compliance   | Implement GDPR, HIPAA, SOC 2 guardrails |
 
 > *A chatbot isn’t just a product—it’s a data gateway. Keep it secure, private, and accountable.*
+
+**Security & Compliance Checklist:**
+
+- [ ] All APIs require authentication and use HTTPS
+- [ ] Sensitive data encrypted at rest and in transit
+- [ ] Data minimization and retention policies enforced
+- [ ] Audit logs and access reviews scheduled
+- [ ] Automated compliance workflows (deletion, export)
+- [ ] Supply chain and dependency scanning enabled
 
 ---
