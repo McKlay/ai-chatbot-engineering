@@ -17,6 +17,9 @@ With the advent of advanced speech models like **OpenAI Whisper** and versatile 
 
 Let’s explore the tools, techniques, and architectures that bring this vision to life.
 
+**Pro Tip:**
+Start with one new modality (e.g., voice) and validate user value before expanding to others. Multi-modal systems add complexity—iterate and test often.
+
 ---
 
 ## 22.1 What is a Multi-modal Chatbot?
@@ -29,6 +32,9 @@ A multi-modal chatbot can process and respond to inputs in more than one modalit
 * **Document**: User uploads a PDF, receipt, invoice, or report.
 
 Multi-modal capabilities expand interaction styles, accessibility, and automation potential—especially in mobile-first or hands-busy environments.
+
+**Accessibility Note:**
+Voice and image input can make chatbots more inclusive for users with disabilities or in hands-busy scenarios.
 
 ---
 
@@ -59,9 +65,20 @@ def transcribe(audio_path):
 
 > Pro Tip: Compress or downsample long audio clips before transcription for speed and cost savings.
 
+**Scaling Tip:**
+Run Whisper in a separate container or microservice to avoid blocking main API threads. Use job queues for batch audio processing.
+
 ### 22.2.4 Live Mic Integration (Frontend)
 
 In a web interface (e.g., React), use the Web Speech API or `MediaRecorder` to record audio and send it to the backend.
+
+**Example: React Audio Recording**
+```js
+const recorder = new MediaRecorder(stream);
+recorder.ondataavailable = (e) => {
+    // Send e.data (audio blob) to backend
+};
+```
 
 ---
 
@@ -87,6 +104,9 @@ tts.save("response.mp3")
 
 > Add audio playback controls on the frontend for accessibility.
 
+**Advanced:**
+Support multiple languages and voices for global reach. Use SSML (Speech Synthesis Markup Language) for richer TTS effects.
+
 ---
 
 ## 22.4 Image Input: Visual Understanding
@@ -109,6 +129,9 @@ When users upload images—whether photos, memes, documents, or screenshots—ch
 | Visual Q\&A           | LLaVA, MiniGPT-4   |
 | Object Detection      | YOLOv8, Detectron2 |
 
+**Security Note:**
+Always scan uploaded images for malware and restrict file types/extensions.
+
 ### 22.4.3 Example: Using BLIP for Image Captioning
 
 ```python
@@ -124,6 +147,9 @@ caption = model.generate(**inputs)
 print(processor.decode(caption[0], skip_special_tokens=True))
 ```
 
+**Tip:**
+For production, run vision models on GPU-enabled servers or use cloud inference APIs for scalability.
+
 ---
 
 ## 22.5 Document Understanding: PDF, Invoices, Reports
@@ -136,6 +162,9 @@ Document-based chatbots are rising fast—especially in legal, financial, and en
 2. Bot extracts text using PDF parsers or OCR.
 3. Text is chunked and embedded (e.g., via OpenAI Embeddings).
 4. A **Retrieval-Augmented Generation (RAG)** pipeline answers user queries about the document.
+
+**Best Practice:**
+Store only temporary copies of uploaded documents and delete them after processing to minimize privacy risk.
 
 ### 22.5.2 Tools and Libraries
 
@@ -155,6 +184,14 @@ def extract_text_from_pdf(path):
     return "\n".join([page.get_text() for page in doc])
 ```
 
+**Chunking Example:**
+```python
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+chunks = splitter.split_text(long_text)
+```
+
 Once text is extracted, follow the RAG pipeline as shown in Chapter 7.
 
 ---
@@ -169,12 +206,16 @@ Design matters. Users must know what kinds of input are supported—and how to s
 * **Image**: Dropzone + preview.
 * **Document**: PDF icon + text feedback (“Drag your invoice here”).
 
+* Validate file size and type before upload. Show progress indicators for large files.
+
 ### 22.6.2 Response Presentation
 
 * **Text**: As usual, with markdown rendering.
 * **Voice**: Optional playback icon with transcript.
 * **Images**: Display captions or object results alongside image.
 * **Documents**: Display matched snippet and page number.
+
+* Allow users to download audio or extracted text results.
 
 ---
 
@@ -197,6 +238,8 @@ Design matters. Users must know what kinds of input are supported—and how to s
 * Leverage **cloud functions** (e.g., GCP Cloud Functions, AWS Lambda) for modular multimodal services.
 * Use **temporary storage** with cleanup jobs to avoid bloated file servers.
 
+* Log all uploads and processing events for audit and debugging.
+
 ---
 
 ## Conclusion
@@ -204,6 +247,13 @@ Design matters. Users must know what kinds of input are supported—and how to s
 Multi-modal chatbots aren’t just a novelty—they’re a necessity in today’s diverse digital landscape. Whether your users prefer typing, speaking, uploading images, or dragging in documents, your bot should be ready to engage, understand, and respond.
 
 By integrating speech, vision, and document understanding, you’ve moved one step closer to building an intelligent agent that feels less like software—and more like an all-in-one assistant.
+
+**Multi-modal Chatbot Checklist:**
+- [ ] Voice, image, and document endpoints implemented
+- [ ] File validation and security checks in place
+- [ ] Asynchronous processing for heavy tasks
+- [ ] UI supports all input/output modalities
+- [ ] Accessibility and privacy best practices followed
 
 In the next chapter, we’ll explore how to take this flexibility even further by **integrating custom tools and plugins** into your chatbot, giving it the ability to interact with APIs, control devices, or execute user-defined tasks.
 
