@@ -17,6 +17,9 @@ We’ll explore the fast-emerging trends that are transforming chatbots into ful
 
 This isn’t prediction—it’s preparation.
 
+**Pro Tip:**
+Track emerging research papers and open-source releases monthly. The pace of change in conversational AI is accelerating—continuous learning is essential.
+
 ---
 
 ## 26.1 The Shift from Chatbots to Agents
@@ -36,6 +39,8 @@ Popular frameworks:
 * **LangChain Agents**
 * **AutoGPT / BabyAGI**
 * **CrewAI / SuperAGI / AgentOps**
+
+* **OpenInterpreter** – natural language code execution
 
 > Agents aren’t just reactive—they’re goal-driven.
 
@@ -66,6 +71,8 @@ Agentic workflows string together multiple agents and tools to complete complex 
 * **OpenAI Code Interpreter** (now “Advanced Data Analysis”)
 * **LangGraph**: graph-based agent orchestration
 
+* **CrewAI**: multi-agent collaboration and role assignment
+
 > Future bots won’t just chat—they’ll collaborate.
 
 ---
@@ -81,6 +88,8 @@ Each generation of LLMs increases not just in **parameter count**, but in **capa
 * **Natively multi-modal** (image, audio, video, document in a single flow)
 * **On-the-fly fine-tuning or user memory**
 * **Factual grounding and citation** integration
+
+* **Agentic reasoning**: models plan, execute, and revise autonomously
 
 ### Impact on Chatbots
 
@@ -107,6 +116,8 @@ Chatbots are evolving into **multi-sensory assistants**:
 * **CLIP**, **BLIP-2**, **LLaVA** – image understanding
 * **Google Gemini**, **GPT-4o** – true multi-modal fusion
 
+* **Perplexity** – multi-modal search and conversational retrieval
+
 ---
 
 ## 26.5 Integration into Daily Operating Systems
@@ -123,6 +134,8 @@ Expect:
 * More real-time hooks (webhooks, RAG pipelines, function calls)
 * Deeper role-based AI: salesbot, supportbot, engineerbot, analystbot
 
+* Seamless integration with enterprise APIs and workflow engines
+
 ---
 
 ## 26.6 Open-Source Ecosystem Maturity
@@ -135,6 +148,8 @@ LLMs aren’t just commercial anymore. Open-source AI is catching up.
 * **Ollama**, **LM Studio**, **lmdeploy** – easy local LLM deployment
 * **vLLM**, **llama.cpp** – fast inference for low-latency bots
 * **LangChain**, **LlamaIndex** – orchestration and RAG frameworks
+
+* **Haystack** – modular RAG and search pipelines
 
 > Expect startups to adopt hybrid stacks: closed API (OpenAI) + open fallback (local LLaMA).
 
@@ -156,6 +171,8 @@ Tech driving this:
 * Pinecone, Weaviate, Qdrant
 * OpenAI “Memory” features (in testing)
 
+* Private LLM deployments for personal and team knowledge graphs
+
 ---
 
 ## 26.8 Regulation and AI Governance on the Rise
@@ -174,6 +191,8 @@ You’ll need:
 * Human override mechanisms
 * Bias and fairness audits
 
+* Model versioning and explainability for regulatory compliance
+
 ---
 
 ## 26.9 Predictions: Where We’re Headed
@@ -188,6 +207,13 @@ You’ll need:
 | Business Roles  | AI copilots in HR, Ops, Sales, Engineering   |
 
 > In the near future, “chatbot” may be an outdated term—what you’ll build is an **AI teammate**.
+
+**Emerging Trends Checklist:**
+- [ ] Agentic workflows and multi-agent orchestration
+- [ ] Multi-modal input/output support
+- [ ] Open-source and hybrid model stacks
+- [ ] Personal memory and data-centric features
+- [ ] Governance, compliance, and explainability
 
 ---
 
