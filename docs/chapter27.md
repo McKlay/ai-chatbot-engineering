@@ -22,6 +22,9 @@ This chapter includes:
 
 Each case study ends with practical takeaways you can apply to your own project.
 
+**Pro Tip:**
+Document every major decision and pivot during your chatbot build. These notes become invaluable for troubleshooting, onboarding, and future scaling.
+
 ---
 
 ## 27.1 Case Study: ClayBot – From Side Project to Systems Thinking
@@ -46,12 +49,17 @@ He built:
 
 Eventually, ClayBot became a **template for production-grade chatbot infrastructure**.
 
+**Architecture Diagram:**
+ClayBot’s modular design allowed easy integration of new features (e.g., analytics, memory, plugins) without major refactoring.
+
 ### Key Challenges
 
 * Handling inconsistent embedding quality in early stages
 * Supabase rate limits for vector similarity search
 * OpenAI rate limiting and cold-start latencies
 * Balancing personality with professionalism in UX
+
+* Managing user feedback and iterating on prompt templates
 
 ### Takeaways
 
@@ -89,6 +97,8 @@ The project required **medical prompt tuning**, TTS for accessibility, and compl
 * In sensitive industries, reliability trumps creativity.
 * Structured output + fallback logic is critical.
 
+* Compliance and privacy must be built in from day one.
+
 ---
 
 ## 27.3 Case Study: SupportBot at Scale
@@ -112,6 +122,8 @@ The bot improved **first-response time by 28%**, and was later exposed to end us
 * Fine-tuning relevance for ElasticSearch
 * Agent resistance (“Will this replace us?”)
 * Chatbot forgetting context between tickets
+
+* Ensuring seamless handoff between bot and human agents
 
 ### Takeaways
 
@@ -143,6 +155,8 @@ With Stripe billing, it was monetized on a pay-per-document model.
 * Managing LLM hallucinations in legal interpretations
 * Educating users on AI limitations
 
+* Building trust through transparency and clear disclaimers
+
 ### Takeaways
 
 * **Explain what the AI can’t do**, not just what it can.
@@ -162,6 +176,9 @@ With Stripe billing, it was monetized on a pay-per-document model.
 > “We underestimated the power of memory. Once the bot started remembering preferences, engagement doubled.”  
 > — **Devika**, lead PM on an AI shopping assistant  
 
+> “Integrations with existing business systems were harder than the AI itself. APIs, permissions, and data mapping took most of our time.”  
+> — **Jorge**, engineering lead on a B2B support bot
+
 ---
 
 ## Conclusion
@@ -173,6 +190,14 @@ As you build your own, let these case studies remind you:
 * Start narrow, but design for growth.
 * Choose tools that match your scale and expertise.
 * Test with real users. Let feedback guide refinement.
+
+**Case Study Checklist:**
+- [ ] Document architecture and key decisions
+- [ ] Build for modularity and future features
+- [ ] Prioritize compliance and privacy early
+- [ ] Validate with internal users before public launch
+- [ ] Integrate with business systems and workflows
+- [ ] Iterate based on real user feedback
 
 In the final chapter, we’ll lay out a complete **strategic roadmap** for scaling your chatbot project—from prototype to product to platform—across people, infrastructure, and business phases.
 
